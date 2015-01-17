@@ -1,7 +1,9 @@
 {
 	"dependencies": {
-		"express": "latest",
+		"cylon": "latest",
+		"events": "latest",
 		"node-wit": "1.0.0",
-		"sleep": "latest"
+		"sleep": "latest",
+		"express": "latest"
 	}
 }
