@@ -8,6 +8,12 @@ var sleep = require('sleep');
 var bodyParser = require('body-parser');
 var http = require('http').Server(app);
 var express = require('express');
+var mraa = require("mraa");
+
+var LED0 = 12;
+var LED1 = 13;
+var recycleLED = new mraa.Gpio(LED0);
+var trashLED = new mraa.Gpio(LED1);
 
 // Cylon dependency to interface with Intel Edison GPIOs
 Cylon.robot({
@@ -31,21 +37,17 @@ Cylon.robot({
 
         // recycle http POST request received
         emitter.on('recycle', function() {
-            for each (servo in recycle) {
-                servo.angle(initial);
-                sleep(sleep);
-                servo.angle(rotation);
-                sleep(sleep);
-                servo.angle(initial);
-            }
+            recycleLED.write(1);
+	    sleep(1);
+	    recycleLED.write(0);
         });
 
         // trash http POST request received
         emitter.on('trash', function() {
-            operate(trash, initial, 0);
-            operate(trash, rotation, sleep);
-            operate(trash, initial, sleep);
-        });
+            trashLED.write(1);
+	    sleep(1);
+	    trashLED.write(0);
+	});
     }
 }).start();
 
@@ -67,7 +69,7 @@ function binaryClassifier (input) {
         if (err) console.log("Error with Wit.ai API", err);
         else {
             if (response['outcomes'].length == 0) 
-            console.log("Unable to process the input.");
+      		console.log("Unable to process the input.");
 
             switch (response['outcomes'][0]) {
                 case 'recycle': emitter.emit('recycle'); break;
@@ -111,7 +113,7 @@ app.get(function() {}, function (request, response) {
     'use strict';
     binaryClassifier(response);
     response.send('Voice Command...');
-})
+});
 
 // Begin the Node.js server
 http.listen(PORT);
