@@ -10,17 +10,12 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
 app.use(bodyParser.json());
-
 var http = require('http').Server(app);
 var mraa = require("mraa");
 
 var LED0 = 13;
-
-//var LED1 = 13;
 var recycleLED = new mraa.Gpio(LED0);
-//var trashLED = new mraa.Gpio(LED1);
 recycleLED.dir(mraa.DIR_OUT);
-//trashLED.dir(mraa.DIR_OUT);
 
 // Cylon dependency to interface with Intel Edison GPIOs
 Cylon.robot({
@@ -29,9 +24,7 @@ Cylon.robot({
     },
     devices: {
         servoRec0: {driver: "servo", pin: 5},
-        //servoRec1: {driver: "servo", pin: 6},
-        //servoTra0: {driver: "servo", pin: 7},
-       servoTra1: {driver: "servo", pin: 8}
+        servoTra1: {driver: "servo", pin: 8}
     },
 
     work: function(my) {
@@ -64,15 +57,11 @@ Cylon.robot({
 		my.servoTra1.angle(90);
 	});
 
-
         emitter.on('light', function() {
 		recycleLED.write(1);
 		sleep.sleep(1);
 		recycleLED.write(0);		
 	});
-
-
-
     }
 }).start();
 
@@ -127,16 +116,10 @@ app.get('/trash', function (request, response) {
 app.get('/listen', function(req, res) {
 	'use strict';
 	emitter.emit('light');
+	response.send("Lighting...");
 });
-/*
-app.get(function() {}, function (request, response) {
-    'use strict';
-    binaryClassifier(response);
-    response.send('Voice Command...');
-});
-*/
 // Begin the Node.js server
 http.listen(PORT, function () {
      'use strict';
-         console.log('listening on *:%d', PORT);
-         });
+     console.log('listening on *:%d', PORT);
+});
