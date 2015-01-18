@@ -24,7 +24,7 @@ Cylon.robot({
     },
     devices: {
         servoRec0: {driver: "servo", pin: 5},
-        servoTra1: {driver: "servo", pin: 8}
+        servoTra1: {driver: "servo", pin: 3}
     },
 
     work: function(my) {
@@ -73,7 +73,7 @@ Cylon.robot({
 	});
         
 	emitter.on('test', function() {
-		console.log("trash");	
+		console.log("testing fron motor");	
 		//my.servoRec0.angle(90); // vertical
 		my.servoTra1.angle(90);
 		sleep.sleep(2);
