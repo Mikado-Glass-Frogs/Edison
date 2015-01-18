@@ -41,13 +41,23 @@ Cylon.robot({
 
         // recycle http POST request received
         emitter.on('recycle', function() {
-        	//my.servoRec1.angle(0);
-		my.servoRec0.angle(110);
+        	// reset to 90
+		my.servoRec0.safeAngle(90);
 		sleep.sleep(2);
-		my.servoRec0.angle(80);
-		//my.servoTra1.angle(110);
-		//my.servoTra1.angle(80);
-		//sleep.sleep(3);
+		my.servoRec0.safeAngle(90);
+/*
+		sleep.sleep(5);
+		my.servoRec0.angle(60);
+		sleep.sleep(5);		
+		my.servoRec0.angle(90);
+		sleep.sleep(5);
+		my.servoTra1.angle(120);
+		sleep.sleep(5);
+		my.servoTra1.angle(150);
+                sleep.sleep(5);
+                my.servoTra1.angle(180);
+                sleep.sleep(5);
+*/
 		
 		//my.servoTra1.angle(0);
 	//	my.servoTra0.angle(rotation);
