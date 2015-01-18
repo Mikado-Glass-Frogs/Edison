@@ -28,10 +28,10 @@ Cylon.robot({
         edison: {adaptor: "intel-iot"}
     },
     devices: {
-        //servoRec0: {driver: "servo", pin: 5},
-        servoRec1: {driver: "servo", pin: 6},
+        servoRec0: {driver: "servo", pin: 5},
+        //servoRec1: {driver: "servo", pin: 6},
         //servoTra0: {driver: "servo", pin: 7},
-        //servoTra1: {driver: "servo", pin: 8}
+       servoTra1: {driver: "servo", pin: 8}
     },
 
     work: function(my) {
@@ -41,24 +41,33 @@ Cylon.robot({
 
         // recycle http POST request received
         emitter.on('recycle', function() {
-        //	my.servoRec0.angle(initial);
-		my.servoRec1.angle(-60);
-		sleep.sleep(3);
-	//	my.servoRec1.angle(0);
+        	//my.servoRec1.angle(0);
+		my.servoRec0.angle(110);
+		sleep.sleep(2);
+		my.servoRec0.angle(80);
+		//my.servoTra1.angle(110);
+		//my.servoTra1.angle(80);
+		//sleep.sleep(3);
+		
+		//my.servoTra1.angle(0);
 	//	my.servoTra0.angle(rotation);
 	//	my.servoTra1.angle(rotation);
 	//	sleep.sleep(3);
 	//	my.servoRec0.angle(initial);
 	//	my.servoRec1.angle(initial);
 	//	sleep.sleep(3);
+			
 	});
-
+	emitter.on('trash', function(){});
         // trash http POST request received
-        emitter.on('trash', function() {
+        emitter.on('light', function() {
 		recycleLED.write(1);
 		sleep.sleep(1);
 		recycleLED.write(0);		
 	});
+
+
+
     }
 }).start();
 
@@ -85,16 +94,6 @@ function binaryClassifier (input) {
     }
     )}
 
-function operate (servos, angle, duration) {
-    for (var i = 0; i < servos.length; i++)
-        servos[i].angle(0);
-    for (var j = 0; j < servos.length; j++)
-	servos[j].angle(angle);
-    sleep.sleep(duration);
-    for (var k = 0; k < servos.length; k++)
-	servos[k].angle(0);
-    sleep.sleep(duration);
-}
 
 // HTTP POST request handler
 
@@ -118,6 +117,11 @@ app.get('/trash', function (request, response) {
     // fire trash event
     emitter.emit('trash');
     response.send('Trashing...');
+});
+
+app.get('/listen', function(req, res) {
+	'use strict';
+	emitter.emit('light');
 });
 /*
 app.get(function() {}, function (request, response) {
