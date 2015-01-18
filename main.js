@@ -2,7 +2,8 @@
 
 // Dependencies
 var Cylon = require("cylon");
-var emitter = require('events').EventEmitter;
+var Emitter = require('events').EventEmitter,
+    emitter = new Emitter();
 var wit = require('node-wit');
 var sleep = require('sleep');
 var bodyParser = require('body-parser');
@@ -28,7 +29,7 @@ Cylon.robot({
     },
 
     work: function(my) {
-        var initial = 0
+        var initial = 0;
         var rotation = 90;
         var sleep = 3;
 
@@ -55,12 +56,10 @@ Cylon.robot({
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true})); 
-app.use(express.json());
-app.use(express.urlencoded());
 
 // Define static variables
 var WIT_TOKEN = "SKTW2C7JNR6WBTSBH5XAYEJ2IT2A2DMI";
-var PORT = 80;
+var PORT = 44000;
 
 // returns result based on the binary classifier built and trained with Wit.ai API
 function binaryClassifier (input) {
@@ -77,13 +76,13 @@ function binaryClassifier (input) {
             }
         }
     }
-}
-
+    )}
+/*
 function operate (servos, angle, sleep) {
     for each (servo in servos)
         servo.angle(angle);
     sleep(sleep);
-}
+}*/
 
 // HTTP POST request handler
 
@@ -102,18 +101,22 @@ app.get('/recycle', function (request, response) {
 });
 
 // handle trash request
-app.get('/trash', function (request, response) {
+app.post('/trash', function (request, response) {
     'use strict';
     // fire trash event
+    console.log('trash');
     emitter.emit('trash');
     response.send('Trashing...');
 });
-
+/*
 app.get(function() {}, function (request, response) {
     'use strict';
     binaryClassifier(response);
     response.send('Voice Command...');
 });
-
+*/
 // Begin the Node.js server
-http.listen(PORT);
+http.listen(PORT, function () {
+     'use strict';
+         console.log('listening on *:%d', PORT);
+         });

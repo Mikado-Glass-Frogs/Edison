@@ -4,6 +4,7 @@
 		"events": "latest",
 		"node-wit": "1.0.0",
 		"sleep": "latest",
-		"express": "latest"
+		"express": "*",
+		"body-parser":"*"
 	}
 }
