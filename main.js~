@@ -39,6 +39,8 @@ Cylon.robot({
         var rotation = 90;
         var duration = 3;
 
+
+
         // recycle http POST request received
         emitter.on('recycle', function() {
         	// reset to 90
@@ -53,13 +55,36 @@ Cylon.robot({
 		console.log("trash");	
 		my.servoRec0.angle(90); // vertical
 		sleep.sleep(2);
-		my.servoRec0.angle(170); // trash
+		my.servoRec0.angle(170); // recycle
 		sleep.sleep(2);
 		my.servoRec0.angle(90); // reset to neutral
 	
 	});
 
 
+
+
+        // recycle http POST request received
+        emitter.on('recycle', function() {
+        	//my.servoRec1.angle(0);
+		my.servoRec0.angle(110);
+		sleep.sleep(2);
+		my.servoRec0.angle(80);
+		//my.servoTra1.angle(110);
+		//my.servoTra1.angle(80);
+		//sleep.sleep(3);
+		
+		//my.servoTra1.angle(0);
+	//	my.servoTra0.angle(rotation);
+	//	my.servoTra1.angle(rotation);
+	//	sleep.sleep(3);
+	//	my.servoRec0.angle(initial);
+	//	my.servoRec1.angle(initial);
+	//	sleep.sleep(3);
+			
+	});
+	emitter.on('trash', function(){});
+        // trash http POST request received
         emitter.on('light', function() {
 		recycleLED.write(1);
 		sleep.sleep(1);
