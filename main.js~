@@ -116,7 +116,7 @@ app.get('/trash', function (request, response) {
 app.get('/listen', function(req, res) {
 	'use strict';
 	emitter.emit('light');
-	response.send("Lighting...");
+	res.send("Lighting...");
 });
 // Begin the Node.js server
 http.listen(PORT, function () {
