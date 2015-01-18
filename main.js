@@ -71,6 +71,22 @@ Cylon.robot({
 		sleep.sleep(1);
 		recycleLED.write(0);		
 	});
+        
+	emitter.on('test', function() {
+		console.log("trash");	
+		//my.servoRec0.angle(90); // vertical
+		my.servoTra1.angle(90);
+		sleep.sleep(2);
+
+		console.log("spin");
+		//my.servoRec0.angle(170); // trash
+		my.servoTra1.angle(10);
+		sleep.sleep(2);
+		
+		console.log("return");
+		//my.servoRec0.angle(90); // reset to neutral
+		my.servoTra1.angle(90);
+	});
     }
 }).start();
 
@@ -127,6 +143,14 @@ app.get('/listen', function(req, res) {
 	emitter.emit('light');
 	res.send("Lighting...");
 });
+
+app.get('/test', function(req, res) {
+	'use strict';
+	emitter.emit('test');
+	res.send("Testing close motor.");
+});
+
+
 // Begin the Node.js server
 http.listen(PORT, function () {
      'use strict';
