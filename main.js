@@ -14,22 +14,24 @@ app.use(bodyParser.json());
 var http = require('http').Server(app);
 var mraa = require("mraa");
 
-var LED0 = 12;
-var LED1 = 13;
+var LED0 = 13;
+
+//var LED1 = 13;
 var recycleLED = new mraa.Gpio(LED0);
-var trashLED = new mraa.Gpio(LED1);
+//var trashLED = new mraa.Gpio(LED1);
 recycleLED.dir(mraa.DIR_OUT);
-trashLED.dir(mraa.DIR_OUT);
+//trashLED.dir(mraa.DIR_OUT);
+
 // Cylon dependency to interface with Intel Edison GPIOs
 Cylon.robot({
     connections: {
         edison: {adaptor: "intel-iot"}
     },
     devices: {
-        servoRec0: {driver: "servo", pin: 5},
+        //servoRec0: {driver: "servo", pin: 5},
         servoRec1: {driver: "servo", pin: 6},
-        servoTra0: {driver: "servo", pin: 7},
-        servoTra1: {driver: "servo", pin: 8}
+        //servoTra0: {driver: "servo", pin: 7},
+        //servoTra1: {driver: "servo", pin: 8}
     },
 
     work: function(my) {
@@ -39,19 +41,23 @@ Cylon.robot({
 
         // recycle http POST request received
         emitter.on('recycle', function() {
-        	my.servoRec0.angle(initial);
-		my.servoRec1.angle(initial);
-		my.servoTra0.angle(rotation);
-		my.servoTra1.angle(rotation);
+        //	my.servoRec0.angle(initial);
+		my.servoRec1.angle(-60);
 		sleep.sleep(3);
-		my.servoRec0.angle(initial);
-		my.servoRec1.angle(initial);
-		sleep.sleep(3);
+	//	my.servoRec1.angle(0);
+	//	my.servoTra0.angle(rotation);
+	//	my.servoTra1.angle(rotation);
+	//	sleep.sleep(3);
+	//	my.servoRec0.angle(initial);
+	//	my.servoRec1.angle(initial);
+	//	sleep.sleep(3);
 	});
 
         // trash http POST request received
         emitter.on('trash', function() {
-	 operate(trash, rotation, duration);
+		recycleLED.write(1);
+		sleep.sleep(1);
+		recycleLED.write(0);		
 	});
     }
 }).start();
