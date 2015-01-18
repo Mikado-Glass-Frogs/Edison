@@ -7,15 +7,19 @@ var Emitter = require('events').EventEmitter,
 var wit = require('node-wit');
 var sleep = require('sleep');
 var bodyParser = require('body-parser');
-var http = require('http').Server(app);
 var express = require('express');
+var app = express();
+app.use(bodyParser.json());
+
+var http = require('http').Server(app);
 var mraa = require("mraa");
 
 var LED0 = 12;
 var LED1 = 13;
 var recycleLED = new mraa.Gpio(LED0);
 var trashLED = new mraa.Gpio(LED1);
-
+recycleLED.dir(mraa.DIR_OUT);
+trashLED.dir(mraa.DIR_OUT);
 // Cylon dependency to interface with Intel Edison GPIOs
 Cylon.robot({
     connections: {
@@ -31,31 +35,28 @@ Cylon.robot({
     work: function(my) {
         var initial = 0;
         var rotation = 90;
-        var sleep = 3;
-
-        var recycle = [my.servoRec0, my.servoRec1];
-        var trash = [my.servoTra0, my.servoTra1];
+        var duration = 3;
 
         // recycle http POST request received
         emitter.on('recycle', function() {
-            recycleLED.write(1);
-	    sleep(1);
-	    recycleLED.write(0);
-        });
+        	my.servoRec0.angle(initial);
+		my.servoRec1.angle(initial);
+		my.servoTra0.angle(rotation);
+		my.servoTra1.angle(rotation);
+		sleep.sleep(3);
+		my.servoRec0.angle(initial);
+		my.servoRec1.angle(initial);
+		sleep.sleep(3);
+	});
 
         // trash http POST request received
         emitter.on('trash', function() {
-            trashLED.write(1);
-	    sleep(1);
-	    trashLED.write(0);
+	 operate(trash, rotation, duration);
 	});
     }
 }).start();
 
 // Use Express with bodyParser
-var app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true})); 
 
 // Define static variables
 var WIT_TOKEN = "SKTW2C7JNR6WBTSBH5XAYEJ2IT2A2DMI";
@@ -77,12 +78,17 @@ function binaryClassifier (input) {
         }
     }
     )}
-/*
-function operate (servos, angle, sleep) {
-    for each (servo in servos)
-        servo.angle(angle);
-    sleep(sleep);
-}*/
+
+function operate (servos, angle, duration) {
+    for (var i = 0; i < servos.length; i++)
+        servos[i].angle(0);
+    for (var j = 0; j < servos.length; j++)
+	servos[j].angle(angle);
+    sleep.sleep(duration);
+    for (var k = 0; k < servos.length; k++)
+	servos[k].angle(0);
+    sleep.sleep(duration);
+}
 
 // HTTP POST request handler
 
@@ -101,10 +107,9 @@ app.get('/recycle', function (request, response) {
 });
 
 // handle trash request
-app.post('/trash', function (request, response) {
+app.get('/trash', function (request, response) {
     'use strict';
     // fire trash event
-    console.log('trash');
     emitter.emit('trash');
     response.send('Trashing...');
 });
