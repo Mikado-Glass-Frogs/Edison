@@ -43,20 +43,25 @@ Cylon.robot({
         emitter.on('recycle', function() {
         	// reset to 90
 		my.servoRec0.angle(90); // vertical
+		my.servoTra1.angle(90);
 		sleep.sleep(2);
 		my.servoRec0.angle(10); // recycle
+		my.servoTra1.andle(170)
 		sleep.sleep(2);
 		my.servoRec0.angle(90); // reset to neutral
+		my.servoTra1.angle(90);
 	});
 	
 	emitter.on('trash', function(){
 		console.log("trash");	
 		my.servoRec0.angle(90); // vertical
+		my.servoTra1.angle(90);
 		sleep.sleep(2);
 		my.servoRec0.angle(170); // trash
+		my.servoTra1.angle(10)
 		sleep.sleep(2);
 		my.servoRec0.angle(90); // reset to neutral
-	
+		my.servoTra1.angle(90);
 	});
 
 
