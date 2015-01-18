@@ -24,7 +24,7 @@ Cylon.robot({
     },
     devices: {
         servoRec0: {driver: "servo", pin: 5},
-        servoTra1: {driver: "servo", pin: 8}
+        servoTra1: {driver: "servo", pin: 3}
     },
 
     work: function(my) {

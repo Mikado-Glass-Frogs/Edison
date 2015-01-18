@@ -41,8 +41,8 @@ Cylon.robot({
 		sleep.sleep(2);
 
 		console.log("spin");
-		my.servoRec0.angle(10); // recycle
-		my.servoTra1.angle(170);
+		my.servoRec0.angle(60); // recycle
+		my.servoTra1.angle(120);
 		sleep.sleep(2);
 
 		console.log("return");
@@ -57,8 +57,8 @@ Cylon.robot({
 		sleep.sleep(2);
 
 		console.log("spin");
-		my.servoRec0.angle(170); // trash
-		my.servoTra1.angle(10);
+		my.servoRec0.angle(120); // trash
+		my.servoTra1.angle(60);
 		sleep.sleep(2);
 		
 		console.log("return");
@@ -80,7 +80,7 @@ Cylon.robot({
 
 		console.log("spin");
 		//my.servoRec0.angle(170); // trash
-		my.servoTra1.angle(10);
+		my.servoTra1.angle(70);
 		sleep.sleep(2);
 		
 		console.log("return");
